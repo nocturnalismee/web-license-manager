@@ -13,6 +13,7 @@ agent task, dan acceptance criteria.
 | [task-backlog.md](development/task-backlog.md) | Backlog task berurutan dengan dependency dan Definition of Done |
 | [agent-roles.md](development/agent-roles.md) | Peran AI agent, scope, input, output, dan guardrails |
 | [ai-development-workflow.md](development/ai-development-workflow.md) | Prosedur menjalankan task secara konsisten |
+| [integration-guide.md](integration-guide.md) | Panduan API, PHP SDK, JavaScript/TypeScript SDK, dan error handling |
 
 ## Source of Truth
 
