@@ -157,7 +157,7 @@ export const platformPlans = pgTable("platform_plans", {
   limits: text("limits").notNull(),
   status: varchar("status", { length: 20 }).default("active").notNull(),
   ...timestamps,
-});
+}, (table) => [unique("platform_plans_name_unique").on(table.name)]);
 
 export const subscriptions = pgTable("subscriptions", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -168,6 +168,19 @@ export const subscriptions = pgTable("subscriptions", {
   currentPeriodEndsAt: timestamp("current_period_ends_at", { withTimezone: true }),
   ...timestamps,
 }, (table) => [index("subscriptions_org_status_idx").on(table.organizationId, table.status)]);
+
+export const entitlements = pgTable("entitlements", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  organizationId: uuid("organization_id").notNull().references(() => organizations.id),
+  subscriptionId: uuid("subscription_id").notNull().references(() => subscriptions.id),
+  feature: varchar("feature", { length: 80 }).notNull(),
+  limitValue: integer("limit_value").notNull(),
+  usedValue: integer("used_value").default(0).notNull(),
+  ...timestamps,
+}, (table) => [
+  unique("entitlements_org_feature_unique").on(table.organizationId, table.feature),
+  index("entitlements_subscription_idx").on(table.subscriptionId),
+]);
 
 export const apiKeys = pgTable("api_keys", {
   id: uuid("id").defaultRandom().primaryKey(),
