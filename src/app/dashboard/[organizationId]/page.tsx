@@ -10,5 +10,5 @@ export default async function OrganizationDashboard({ params }: { params: Promis
   const membership = await getMembership(session.user.id, organizationId);
   if (!membership) notFound();
 
-  return <main><div className="eyebrow">Organization</div><h1>{membership.organizationName}</h1><p>Role: <strong>{membership.role}</strong>. Tenant context is validated server-side.</p><section className="card"><p>Products, plans, licenses, activations, and billing.</p><Link href={`/dashboard/${organizationId}/billing`}>Open billing dashboard →</Link></section></main>;
+  return <main><div className="eyebrow">Organization</div><h1>{membership.organizationName}</h1><p>Role: <strong>{membership.role}</strong>. Tenant context is validated server-side.</p><section className="card"><p>Products, plans, licenses, activations, and billing.</p><p><Link href={`/dashboard/${organizationId}/licenses`}>Open license dashboard →</Link></p><Link href={`/dashboard/${organizationId}/billing`}>Open billing dashboard →</Link></section></main>;
 }

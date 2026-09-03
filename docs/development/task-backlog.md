@@ -32,7 +32,7 @@ Status: `TODO` | `IN_PROGRESS` | `BLOCKED` | `DONE`
 | T-023 | License lifecycle/status evaluator | T-022 | Unit tests for active/expired/suspended/revoked |
 | T-024 | Activation transaction and idempotency | T-023 | Concurrent limit test passes on PostgreSQL |
 | T-025 | Public activate/validate/deactivate endpoints | T-024,T-004 | Contract, auth, error, rate-limit tests pass |
-| T-026 | License/customer/activation dashboard | T-025 | Pagination, filters, role policy pass |
+| T-026 | License/customer/activation dashboard — **DONE** | T-025 | Pagination, filters, role policy pass |
 
 ## Phase 3 — Security and Operations
 
@@ -61,8 +61,8 @@ Status: `TODO` | `IN_PROGRESS` | `BLOCKED` | `DONE`
 |---|---|---|---|
 | T-050 | PHP and JavaScript reference SDK — **DONE** | T-025 | Timeout/retry/error/cache behavior tested |
 | T-051 | Integration documentation and examples — **DONE** | T-050 | Copy/paste examples for cURL, PHP, and JavaScript tersedia |
-| T-052 | Playwright critical journey — **DONE** | T-026,T-045 | Signup/dashboard/organization/billing journey pass; license sandbox awaits fixture |
-| T-053 | Production readiness review | T-031,T-034,T-052 | Security/NFR/rollback checklist signed off |
+| T-052 | Playwright critical journey — **DONE** | T-026,T-045 | Signup/dashboard/organization/billing/license sandbox journey pass |
+| T-053 | Production readiness review — **DONE (CONDITIONAL)** | T-031,T-034,T-052 | Checklist documented; provider signature, DB integration, and infrastructure gates remain explicit |
 
 ## Critical Path
 
