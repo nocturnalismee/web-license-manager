@@ -136,6 +136,7 @@ Billing MVP policy:
 - Upgrade dibuat sebagai order baru dan berlaku setelah payment webhook sukses; MVP tidak memakai proration.
 - Downgrade disimpan sebagai `scheduled_platform_plan_id` dan berlaku pada akhir periode berjalan.
 - Cancellation mengatur `cancel_at_period_end`; akses tetap berjalan hingga akhir periode dan dapat di-resume.
+- Billing dashboard menampilkan usage meter; warning muncul mulai 80% dan pemakaian baru ditolak saat limit tercapai.
 - Mayar hanya provider; order, payment, subscription, dan entitlement IndoLicense tetap source of truth.
 
 ```text

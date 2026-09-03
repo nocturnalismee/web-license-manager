@@ -53,7 +53,7 @@ Status: `TODO` | `IN_PROGRESS` | `BLOCKED` | `DONE`
 | T-042 | Webhook verification and idempotent event store — **DONE** | T-041 | Duplicate/tampered event handling implemented; provider signature header must be confirmed in sandbox |
 | T-043 | Subscription state machine, trial, grace period — **DONE** | T-042,T-005 | Seven-day trial/grace transition tests pass |
 | T-044 | Upgrade/downgrade/cancellation policy — **DONE** | T-043 | Upgrade-after-payment, downgrade-at-period-end, reversible cancellation tested |
-| T-045 | Billing dashboard and usage paywall | T-040,T-043 | UI explains effect before confirmation |
+| T-045 | Billing dashboard and usage paywall — **DONE** | T-040,T-043 | UI displays plan/status/usage and explains effect before confirmation |
 
 ## Phase 5 — DX and Release
 
