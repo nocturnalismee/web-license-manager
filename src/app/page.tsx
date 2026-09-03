@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ThemeToggle from "./theme-toggle";
 
 export const metadata: Metadata = {
   title: "Software License Management Platform for SaaS & Developers",
@@ -50,7 +51,7 @@ export default function HomePage() {
           <a href="#pricing">Pricing</a>
           <a href="#faq">FAQ</a>
         </div>
-        <div className="nav-actions"><Link href="/auth/sign-in">Sign in</Link><Link className="button button-small" href="/auth/sign-up">Get started</Link></div>
+        <div className="nav-actions"><ThemeToggle /><Link href="/auth/sign-in">Sign in</Link><Link className="button button-small" href="/auth/sign-up">Get started</Link></div>
       </nav>
 
       <section className="landing-hero" id="main-content">
