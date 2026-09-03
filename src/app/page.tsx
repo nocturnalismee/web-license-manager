@@ -23,8 +23,21 @@ const pricingPlans = [
   { name: "Agency", price: "Rp 799.000", description: "Untuk agency dan portfolio produk berskala besar.", limits: ["100 products", "100.000 licenses", "100.000 activations", "5.000.000 API validations"], featured: false, action: "Talk to sales", href: "mailto:hello@indolicense.dev" },
 ];
 
+const faqs = [
+  { question: "Apakah trial 7 hari membutuhkan kartu pembayaran?", answer: "Tidak. Anda dapat mencoba IndoLicense selama 7 hari tanpa memasukkan kartu pembayaran. Setelah trial berakhir, subscription akan expired dan fitur protected API akan berhenti sampai Anda memilih paket berbayar." },
+  { question: "Bagaimana license key IndoLicense diamankan?", answer: "License key dibuat dengan random generator yang aman. IndoLicense hanya menyimpan hash dan key prefix di database, sehingga plaintext key tidak dapat diambil ulang dari dashboard." },
+  { question: "Apakah IndoLicense bisa dipakai untuk aplikasi desktop dan SaaS?", answer: "Bisa. Public API mendukung validasi license, aktivasi installation, dan deactivation untuk desktop app, web app, plugin, API, maupun software yang didistribusikan ke customer." },
+  { question: "Apakah tersedia SDK untuk integrasi?", answer: "Ya. IndoLicense menyediakan reference SDK JavaScript dan PHP, selain endpoint REST yang dapat digunakan dari bahasa pemrograman apa pun." },
+  { question: "Apa yang terjadi jika batas activation tercapai?", answer: "Permintaan activation baru akan ditolak dengan error yang jelas. Customer dapat menonaktifkan installation lama dari sistem Anda atau dashboard sebelum melakukan activation di perangkat baru." },
+  { question: "Bisakah saya upgrade atau downgrade paket?", answer: "Bisa. Upgrade dapat diproses segera setelah pembayaran berhasil, sedangkan downgrade dijadwalkan pada akhir periode berjalan agar entitlement yang sudah digunakan tetap konsisten." },
+  { question: "Apakah data setiap organization terisolasi?", answer: "Ya. Setiap organization memiliki tenant context dan akses diverifikasi server-side berdasarkan membership serta role, sehingga resource organization lain tidak dapat diakses." },
+];
+
 export default function HomePage() {
-  const structuredData = { "@context": "https://schema.org", "@type": "SoftwareApplication", name: "IndoLicense", applicationCategory: "BusinessApplication", operatingSystem: "Web", description: "Software license management and activation API for software vendors.", offers: pricingPlans.map((plan) => ({ "@type": "Offer", name: plan.name, price: plan.price.replace(/[^0-9]/g, "") || "0", priceCurrency: "IDR", url: "https://indolicense.dev/#pricing" })) };
+  const structuredData = [
+    { "@context": "https://schema.org", "@type": "SoftwareApplication", name: "IndoLicense", applicationCategory: "BusinessApplication", operatingSystem: "Web", description: "Software license management and activation API for software vendors.", offers: pricingPlans.map((plan) => ({ "@type": "Offer", name: plan.name, price: plan.price.replace(/[^0-9]/g, "") || "0", priceCurrency: "IDR", url: "https://indolicense.dev/#pricing" })) },
+    { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) },
+  ];
   return (
     <main className="landing-shell">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
@@ -35,7 +48,7 @@ export default function HomePage() {
           <a href="#how-it-works">How it works</a>
           <a href="#features">Features</a>
           <a href="#pricing">Pricing</a>
-          <a href="#docs">Docs</a>
+          <a href="#faq">FAQ</a>
         </div>
         <div className="nav-actions"><Link href="/auth/sign-in">Sign in</Link><Link className="button button-small" href="/auth/sign-up">Get started</Link></div>
       </nav>
@@ -62,6 +75,8 @@ export default function HomePage() {
       <section className="section-block" id="features"><div className="terminal-label"><span>~/</span><strong>features</strong></div><div className="section-heading"><h2>The boring infrastructure<br /><em>done properly.</em></h2><p>Simple surfaces for your team. Strong guarantees for your customers.</p></div><div className="feature-grid">{features.map((feature) => <article key={feature.index}><span>{feature.index}</span><h3>{feature.title}</h3><p>{feature.body}</p><a href="#docs">Explore feature <span>↗</span></a></article>)}</div></section>
 
       <section className="pricing-section" id="pricing"><div className="terminal-label"><span>~/</span><strong>pricing</strong></div><div className="section-heading"><div><h2>Simple plans.<br /><em>Room to grow.</em></h2><p>All plans include a 7-day free trial. No credit card required. Upgrade or downgrade whenever your product changes.</p></div><span className="billing-note">IDR · MONTHLY</span></div><div className="pricing-grid">{pricingPlans.map((plan) => <article className={`pricing-card ${plan.featured ? "pricing-card-featured" : ""}`} key={plan.name}>{plan.featured && <span className="popular-tag">MOST POPULAR</span>}<span className="price-label">{plan.name.toUpperCase()}</span><div className="plan-price">{plan.price}<small>/bulan</small></div><p>{plan.description}</p><ul>{plan.limits.map((limit) => <li key={limit}><span>✓</span>{limit}</li>)}</ul><Link className={`button ${plan.featured ? "" : "button-ghost"}`} href={plan.href}>{plan.action} <span>→</span></Link></article>)}</div></section>
+
+      <section className="faq-section" id="faq"><div className="terminal-label"><span>~/</span><strong>faq</strong></div><div className="section-heading"><h2>Questions before<br /><em>you ship?</em></h2><p>Clear answers for the decisions that matter when licensing becomes part of your product.</p></div><div className="faq-list">{faqs.map((faq, index) => <details key={faq.question} open={index === 0}><summary><span>{String(index + 1).padStart(2, "0")}</span>{faq.question}<b>+</b></summary><p>{faq.answer}</p></details>)}</div></section>
 
       <section className="final-cta" id="docs"><div className="terminal-label"><span>~/</span><strong>ready</strong></div><h2>Your software deserves<br /><em>a proper license layer.</em></h2><Link className="button" href="/auth/sign-up">Build with IndoLicense <span>→</span></Link></section>
       <footer className="landing-footer"><Link className="brand" href="/"><span className="brand-mark">›_</span><span>IndoLicense</span></Link><span>License infrastructure for software vendors.</span><span>© 2026 IndoLicense</span></footer>
