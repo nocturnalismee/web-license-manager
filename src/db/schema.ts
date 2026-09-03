@@ -99,8 +99,11 @@ export const productLicensePlans = pgTable("product_license_plans", {
   organizationId: uuid("organization_id").notNull().references(() => organizations.id),
   productId: uuid("product_id").notNull().references(() => products.id),
   name: varchar("name", { length: 100 }).notNull(),
+  priceIdr: integer("price_idr").default(0).notNull(),
+  billingInterval: varchar("billing_interval", { length: 20 }).default("one_time").notNull(),
   activationLimit: integer("activation_limit").notNull(),
   durationDays: integer("duration_days").notNull(),
+  features: text("features").default("{}").notNull(),
   status: varchar("status", { length: 20 }).default("active").notNull(),
   ...timestamps,
 }, (table) => [index("product_license_plans_product_idx").on(table.productId)]);
