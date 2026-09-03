@@ -164,10 +164,51 @@ export const subscriptions = pgTable("subscriptions", {
   organizationId: uuid("organization_id").notNull().references(() => organizations.id),
   platformPlanId: uuid("platform_plan_id").notNull().references(() => platformPlans.id),
   status: varchar("status", { length: 20 }).notNull(),
+  provider: varchar("provider", { length: 40 }),
+  providerSubscriptionId: varchar("provider_subscription_id", { length: 180 }),
+  trialStartedAt: timestamp("trial_started_at", { withTimezone: true }),
   trialEndsAt: timestamp("trial_ends_at", { withTimezone: true }),
+  graceEndsAt: timestamp("grace_ends_at", { withTimezone: true }),
   currentPeriodEndsAt: timestamp("current_period_ends_at", { withTimezone: true }),
+  cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false).notNull(),
   ...timestamps,
 }, (table) => [index("subscriptions_org_status_idx").on(table.organizationId, table.status)]);
+
+export const orders = pgTable("orders", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  organizationId: uuid("organization_id").notNull().references(() => organizations.id),
+  platformPlanId: uuid("platform_plan_id").notNull().references(() => platformPlans.id),
+  provider: varchar("provider", { length: 40 }).notNull(),
+  status: varchar("status", { length: 20 }).default("pending").notNull(),
+  amount: integer("amount").notNull(),
+  currency: varchar("currency", { length: 3 }).default("IDR").notNull(),
+  providerOrderId: varchar("provider_order_id", { length: 180 }),
+  checkoutUrl: text("checkout_url"),
+  expiresAt: timestamp("expires_at", { withTimezone: true }),
+  metadata: text("metadata"),
+  ...timestamps,
+}, (table) => [
+  index("orders_org_status_idx").on(table.organizationId, table.status),
+  unique("orders_provider_order_unique").on(table.provider, table.providerOrderId),
+]);
+
+export const payments = pgTable("payments", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  orderId: uuid("order_id").notNull().references(() => orders.id),
+  organizationId: uuid("organization_id").notNull().references(() => organizations.id),
+  provider: varchar("provider", { length: 40 }).notNull(),
+  providerPaymentId: varchar("provider_payment_id", { length: 180 }).notNull(),
+  status: varchar("status", { length: 20 }).notNull(),
+  amount: integer("amount").notNull(),
+  currency: varchar("currency", { length: 3 }).default("IDR").notNull(),
+  paidAt: timestamp("paid_at", { withTimezone: true }),
+  refundedAt: timestamp("refunded_at", { withTimezone: true }),
+  rawPayload: text("raw_payload"),
+  ...timestamps,
+}, (table) => [
+  unique("payments_provider_payment_unique").on(table.provider, table.providerPaymentId),
+  index("payments_order_idx").on(table.orderId),
+]);
 
 export const entitlements = pgTable("entitlements", {
   id: uuid("id").defaultRandom().primaryKey(),

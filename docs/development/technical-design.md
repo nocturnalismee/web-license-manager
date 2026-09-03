@@ -124,6 +124,17 @@ Adapter agar domain service tidak bergantung pada library tertentu.
 
 Environment minimum:
 
+- `MAYAR_API_KEY` untuk membuat invoice dari server.
+- `MAYAR_API_BASE_URL` untuk production/sandbox endpoint selection.
+- `MAYAR_WEBHOOK_SECRET` wajib di production setelah format signature Mayar dikonfirmasi.
+
+Billing MVP policy:
+
+- Trial 7 hari, tanpa kartu pembayaran; setelah berakhir status menjadi `expired`.
+- Payment failure menjadi `past_due` selama 7 hari; setelah itu `suspended`.
+- Pembayaran sukses mengaktifkan subscription dan materialize entitlement plan dalam satu transaksi.
+- Mayar hanya provider; order, payment, subscription, dan entitlement IndoLicense tetap source of truth.
+
 ```text
 DATABASE_URL=Supabase direct connection string
 DATABASE_POOL_URL=Supabase pooled connection string (if runtime needs it)

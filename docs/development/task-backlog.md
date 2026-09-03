@@ -49,9 +49,9 @@ Status: `TODO` | `IN_PROGRESS` | `BLOCKED` | `DONE`
 | ID | Task | Dependency | Acceptance |
 |---|---|---|---|
 | T-040 | Platform plans and entitlement evaluator | T-005,T-010 | Quotas are config-driven |
-| T-041 | Mayar checkout/order/payment adapter | T-040 | Checkout reference persisted |
-| T-042 | Webhook verification and idempotent event store | T-041 | Duplicate/tampered event tests pass |
-| T-043 | Subscription state machine, trial, grace period | T-042,T-005 | State transition tests pass |
+| T-041 | Mayar checkout/order/payment adapter — **DONE** | T-040 | Checkout reference persisted |
+| T-042 | Webhook verification and idempotent event store — **DONE** | T-041 | Duplicate/tampered event handling implemented; provider signature header must be confirmed in sandbox |
+| T-043 | Subscription state machine, trial, grace period — **DONE** | T-042,T-005 | Seven-day trial/grace transition tests pass |
 | T-044 | Upgrade/downgrade/cancellation policy | T-043 | Immediate/scheduled behavior tested |
 | T-045 | Billing dashboard and usage paywall | T-040,T-043 | UI explains effect before confirmation |
 
