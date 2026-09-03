@@ -4,7 +4,7 @@ import { apiError, parsePublicLicenseRequest } from "@/app/api/v1/licenses/_shar
 
 export async function POST(request: Request) {
   const requestId = crypto.randomUUID();
-  const parsed = await parsePublicLicenseRequest(request, requestId);
+  const parsed = await parsePublicLicenseRequest(request, requestId, "deactivate");
   if ("response" in parsed) return parsed.response;
   try { return NextResponse.json({ data: await deactivateLicense(parsed.value), error: null, request_id: requestId }); }
   catch (error) { return apiError(error instanceof Error ? error.message : "INTERNAL_ERROR", requestId); }

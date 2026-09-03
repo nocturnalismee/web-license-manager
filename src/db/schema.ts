@@ -205,3 +205,10 @@ export const auditLogs = pgTable("audit_logs", {
   success: boolean("success").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [index("audit_logs_org_created_idx").on(table.organizationId, table.createdAt)]);
+
+export const rateLimitBuckets = pgTable("rate_limit_buckets", {
+  key: text("key").primaryKey(),
+  windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+  requestCount: integer("request_count").default(0).notNull(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+});
