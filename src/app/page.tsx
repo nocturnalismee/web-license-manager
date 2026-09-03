@@ -6,6 +6,13 @@ const features = [
   { index: "03", title: "Ship a clean API", body: "Give your customers a predictable REST API and lightweight SDKs that fit directly into their product." },
 ];
 
+const pricingPlans = [
+  { name: "Free", price: "Rp 0", description: "Untuk mencoba licensing pada produk pertama.", limits: ["1 product", "100 licenses", "100 activations", "10.000 API validations"], featured: false },
+  { name: "Starter", price: "Rp 99.000", description: "Untuk software team yang mulai bertumbuh.", limits: ["3 products", "1.000 licenses", "1.000 activations", "100.000 API validations"], featured: false },
+  { name: "Pro", price: "Rp 299.000", description: "Untuk bisnis dengan banyak customer aktif.", limits: ["20 products", "10.000 licenses", "10.000 activations", "1.000.000 API validations"], featured: true },
+  { name: "Agency", price: "Rp 799.000", description: "Untuk agency dan portfolio produk berskala besar.", limits: ["100 products", "100.000 licenses", "100.000 activations", "5.000.000 API validations"], featured: false },
+];
+
 export default function HomePage() {
   return (
     <main className="landing-shell">
@@ -41,7 +48,7 @@ export default function HomePage() {
 
       <section className="section-block" id="features"><div className="terminal-label"><span>~/</span><strong>features</strong></div><div className="section-heading"><h2>The boring infrastructure<br /><em>done properly.</em></h2><p>Simple surfaces for your team. Strong guarantees for your customers.</p></div><div className="feature-grid">{features.map((feature) => <article key={feature.index}><span>{feature.index}</span><h3>{feature.title}</h3><p>{feature.body}</p><a href="#docs">Explore feature <span>↗</span></a></article>)}</div></section>
 
-      <section className="pricing-banner" id="pricing"><div><div className="terminal-label"><span>~/</span><strong>pricing</strong></div><h2>Start small.<br /><em>Scale without rewrites.</em></h2><p>Try IndoLicense free for 7 days. No card, no lock-in, and a clear path from your first customer to your next thousand.</p></div><div className="price-card"><span className="price-label">STARTER</span><strong>Built for launch</strong><p>Everything you need to ship your first licensed product.</p><Link className="button" href="/auth/sign-up">Start free trial →</Link></div></section>
+      <section className="pricing-section" id="pricing"><div className="terminal-label"><span>~/</span><strong>pricing</strong></div><div className="section-heading"><div><h2>Simple plans.<br /><em>Room to grow.</em></h2><p>All plans include a 7-day free trial. No credit card required. Upgrade or downgrade whenever your product changes.</p></div><span className="billing-note">IDR · MONTHLY</span></div><div className="pricing-grid">{pricingPlans.map((plan) => <article className={`pricing-card ${plan.featured ? "pricing-card-featured" : ""}`} key={plan.name}>{plan.featured && <span className="popular-tag">MOST POPULAR</span>}<span className="price-label">{plan.name.toUpperCase()}</span><div className="plan-price">{plan.price}<small>/bulan</small></div><p>{plan.description}</p><ul>{plan.limits.map((limit) => <li key={limit}><span>✓</span>{limit}</li>)}</ul><Link className={`button ${plan.featured ? "" : "button-ghost"}`} href="/auth/sign-up">Start free trial <span>→</span></Link></article>)}</div></section>
 
       <section className="final-cta" id="docs"><div className="terminal-label"><span>~/</span><strong>ready</strong></div><h2>Your software deserves<br /><em>a proper license layer.</em></h2><Link className="button" href="/auth/sign-up">Build with IndoLicense <span>→</span></Link></section>
       <footer className="landing-footer"><Link className="brand" href="/"><span className="brand-mark">›_</span><span>IndoLicense</span></Link><span>License infrastructure for software vendors.</span><span>© 2026 IndoLicense</span></footer>
