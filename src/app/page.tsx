@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Software License Management Platform for SaaS & Developers",
+  description: "IndoLicense is a secure software license management platform for issuing license keys, controlling activations, and managing entitlements through a developer-first API.",
+  keywords: ["software license management", "license key management", "SaaS licensing", "software activation API", "IndoLicense"],
+  alternates: { canonical: "/" },
+  openGraph: { title: "IndoLicense — License your software. Keep control.", description: "Issue secure license keys, control activations, and manage software entitlements from one developer-first platform.", type: "website", url: "/" },
+  twitter: { card: "summary_large_image", title: "IndoLicense — Software licensing infrastructure", description: "Secure license keys and activation management for software teams." },
+};
 
 const features = [
   { index: "01", title: "Issue with confidence", body: "Create signed, hashed licenses for every product and plan without exposing secrets in your database." },
@@ -7,15 +17,18 @@ const features = [
 ];
 
 const pricingPlans = [
-  { name: "Free", price: "Rp 0", description: "Untuk mencoba licensing pada produk pertama.", limits: ["1 product", "100 licenses", "100 activations", "10.000 API validations"], featured: false },
-  { name: "Starter", price: "Rp 99.000", description: "Untuk software team yang mulai bertumbuh.", limits: ["3 products", "1.000 licenses", "1.000 activations", "100.000 API validations"], featured: false },
-  { name: "Pro", price: "Rp 299.000", description: "Untuk bisnis dengan banyak customer aktif.", limits: ["20 products", "10.000 licenses", "10.000 activations", "1.000.000 API validations"], featured: true },
-  { name: "Agency", price: "Rp 799.000", description: "Untuk agency dan portfolio produk berskala besar.", limits: ["100 products", "100.000 licenses", "100.000 activations", "5.000.000 API validations"], featured: false },
+  { name: "Free", price: "Rp 0", description: "Untuk mencoba licensing pada produk pertama.", limits: ["1 product", "100 licenses", "100 activations", "10.000 API validations"], featured: false, action: "Use free plan", href: "/auth/sign-up" },
+  { name: "Starter", price: "Rp 99.000", description: "Untuk software team yang mulai bertumbuh.", limits: ["3 products", "1.000 licenses", "1.000 activations", "100.000 API validations"], featured: false, action: "Try Starter", href: "/auth/sign-up" },
+  { name: "Pro", price: "Rp 299.000", description: "Untuk bisnis dengan banyak customer aktif.", limits: ["20 products", "10.000 licenses", "10.000 activations", "1.000.000 API validations"], featured: true, action: "Start with Pro", href: "/auth/sign-up" },
+  { name: "Agency", price: "Rp 799.000", description: "Untuk agency dan portfolio produk berskala besar.", limits: ["100 products", "100.000 licenses", "100.000 activations", "5.000.000 API validations"], featured: false, action: "Talk to sales", href: "mailto:hello@indolicense.dev" },
 ];
 
 export default function HomePage() {
+  const structuredData = { "@context": "https://schema.org", "@type": "SoftwareApplication", name: "IndoLicense", applicationCategory: "BusinessApplication", operatingSystem: "Web", description: "Software license management and activation API for software vendors.", offers: pricingPlans.map((plan) => ({ "@type": "Offer", name: plan.name, price: plan.price.replace(/[^0-9]/g, "") || "0", priceCurrency: "IDR", url: "https://indolicense.dev/#pricing" })) };
   return (
     <main className="landing-shell">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <a className="skip-link" href="#main-content">Skip to content</a>
       <nav className="landing-nav" aria-label="Main navigation">
         <Link className="brand" href="/" aria-label="IndoLicense home"><span className="brand-mark">›_</span><span>IndoLicense</span></Link>
         <div className="nav-links">
@@ -27,7 +40,7 @@ export default function HomePage() {
         <div className="nav-actions"><Link href="/auth/sign-in">Sign in</Link><Link className="button button-small" href="/auth/sign-up">Get started</Link></div>
       </nav>
 
-      <section className="landing-hero">
+      <section className="landing-hero" id="main-content">
         <div className="hero-copy">
           <div className="terminal-label"><span>~/</span>license-infrastructure</div>
           <h1>License your software.<br /><em>Keep control.</em></h1>
@@ -48,7 +61,7 @@ export default function HomePage() {
 
       <section className="section-block" id="features"><div className="terminal-label"><span>~/</span><strong>features</strong></div><div className="section-heading"><h2>The boring infrastructure<br /><em>done properly.</em></h2><p>Simple surfaces for your team. Strong guarantees for your customers.</p></div><div className="feature-grid">{features.map((feature) => <article key={feature.index}><span>{feature.index}</span><h3>{feature.title}</h3><p>{feature.body}</p><a href="#docs">Explore feature <span>↗</span></a></article>)}</div></section>
 
-      <section className="pricing-section" id="pricing"><div className="terminal-label"><span>~/</span><strong>pricing</strong></div><div className="section-heading"><div><h2>Simple plans.<br /><em>Room to grow.</em></h2><p>All plans include a 7-day free trial. No credit card required. Upgrade or downgrade whenever your product changes.</p></div><span className="billing-note">IDR · MONTHLY</span></div><div className="pricing-grid">{pricingPlans.map((plan) => <article className={`pricing-card ${plan.featured ? "pricing-card-featured" : ""}`} key={plan.name}>{plan.featured && <span className="popular-tag">MOST POPULAR</span>}<span className="price-label">{plan.name.toUpperCase()}</span><div className="plan-price">{plan.price}<small>/bulan</small></div><p>{plan.description}</p><ul>{plan.limits.map((limit) => <li key={limit}><span>✓</span>{limit}</li>)}</ul><Link className={`button ${plan.featured ? "" : "button-ghost"}`} href="/auth/sign-up">Start free trial <span>→</span></Link></article>)}</div></section>
+      <section className="pricing-section" id="pricing"><div className="terminal-label"><span>~/</span><strong>pricing</strong></div><div className="section-heading"><div><h2>Simple plans.<br /><em>Room to grow.</em></h2><p>All plans include a 7-day free trial. No credit card required. Upgrade or downgrade whenever your product changes.</p></div><span className="billing-note">IDR · MONTHLY</span></div><div className="pricing-grid">{pricingPlans.map((plan) => <article className={`pricing-card ${plan.featured ? "pricing-card-featured" : ""}`} key={plan.name}>{plan.featured && <span className="popular-tag">MOST POPULAR</span>}<span className="price-label">{plan.name.toUpperCase()}</span><div className="plan-price">{plan.price}<small>/bulan</small></div><p>{plan.description}</p><ul>{plan.limits.map((limit) => <li key={limit}><span>✓</span>{limit}</li>)}</ul><Link className={`button ${plan.featured ? "" : "button-ghost"}`} href={plan.href}>{plan.action} <span>→</span></Link></article>)}</div></section>
 
       <section className="final-cta" id="docs"><div className="terminal-label"><span>~/</span><strong>ready</strong></div><h2>Your software deserves<br /><em>a proper license layer.</em></h2><Link className="button" href="/auth/sign-up">Build with IndoLicense <span>→</span></Link></section>
       <footer className="landing-footer"><Link className="brand" href="/"><span className="brand-mark">›_</span><span>IndoLicense</span></Link><span>License infrastructure for software vendors.</span><span>© 2026 IndoLicense</span></footer>
