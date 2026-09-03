@@ -137,7 +137,7 @@ Billing MVP policy:
 - Downgrade disimpan sebagai `scheduled_platform_plan_id` dan berlaku pada akhir periode berjalan.
 - Cancellation mengatur `cancel_at_period_end`; akses tetap berjalan hingga akhir periode dan dapat di-resume.
 - Billing dashboard menampilkan usage meter; warning muncul mulai 80% dan pemakaian baru ditolak saat limit tercapai.
-- PHP SDK menjadi reference client resmi: timeout default 5 detik, retry terbatas untuk network/408/429/5xx, dan cache validate in-memory 30 detik.
+- PHP dan JavaScript/TypeScript SDK menjadi reference client resmi: timeout default 5 detik, retry terbatas untuk network/408/429/5xx, dan cache validate in-memory 30 detik.
 - Mayar hanya provider; order, payment, subscription, dan entitlement IndoLicense tetap source of truth.
 
 ```text
