@@ -17,20 +17,20 @@ const features = [
 ];
 
 const pricingPlans = [
-  { name: "Free", price: "Rp 0", description: "Untuk mencoba licensing pada produk pertama.", limits: ["1 product", "100 licenses", "100 activations", "10.000 API validations"], featured: false, action: "Use free plan", href: "/auth/sign-up" },
-  { name: "Starter", price: "Rp 99.000", description: "Untuk software team yang mulai bertumbuh.", limits: ["3 products", "1.000 licenses", "1.000 activations", "100.000 API validations"], featured: false, action: "Try Starter", href: "/auth/sign-up" },
-  { name: "Pro", price: "Rp 299.000", description: "Untuk bisnis dengan banyak customer aktif.", limits: ["20 products", "10.000 licenses", "10.000 activations", "1.000.000 API validations"], featured: true, action: "Start with Pro", href: "/auth/sign-up" },
-  { name: "Agency", price: "Rp 799.000", description: "Untuk agency dan portfolio produk berskala besar.", limits: ["100 products", "100.000 licenses", "100.000 activations", "5.000.000 API validations"], featured: false, action: "Talk to sales", href: "mailto:hello@indolicense.dev" },
+  { name: "Free", price: "Rp 0", description: "Try licensing with your first product.", limits: ["1 product", "100 licenses", "100 activations", "10.000 API validations"], featured: false, action: "Use free plan", href: "/auth/sign-up" },
+  { name: "Starter", price: "Rp 99.000", description: "For software teams starting to grow.", limits: ["3 products", "1.000 licenses", "1.000 activations", "100.000 API validations"], featured: false, action: "Try Starter", href: "/auth/sign-up" },
+  { name: "Pro", price: "Rp 299.000", description: "For businesses with an active customer base.", limits: ["20 products", "10.000 licenses", "10.000 activations", "1.000.000 API validations"], featured: true, action: "Start with Pro", href: "/auth/sign-up" },
+  { name: "Agency", price: "Rp 799.000", description: "For agencies and large product portfolios.", limits: ["100 products", "100.000 licenses", "100.000 activations", "5.000.000 API validations"], featured: false, action: "Talk to sales", href: "mailto:hello@indolicense.dev" },
 ];
 
 const faqs = [
-  { question: "Apakah trial 7 hari membutuhkan kartu pembayaran?", answer: "Tidak. Anda dapat mencoba IndoLicense selama 7 hari tanpa memasukkan kartu pembayaran. Setelah trial berakhir, subscription akan expired dan fitur protected API akan berhenti sampai Anda memilih paket berbayar." },
-  { question: "Bagaimana license key IndoLicense diamankan?", answer: "License key dibuat dengan random generator yang aman. IndoLicense hanya menyimpan hash dan key prefix di database, sehingga plaintext key tidak dapat diambil ulang dari dashboard." },
-  { question: "Apakah IndoLicense bisa dipakai untuk aplikasi desktop dan SaaS?", answer: "Bisa. Public API mendukung validasi license, aktivasi installation, dan deactivation untuk desktop app, web app, plugin, API, maupun software yang didistribusikan ke customer." },
-  { question: "Apakah tersedia SDK untuk integrasi?", answer: "Ya. IndoLicense menyediakan reference SDK JavaScript dan PHP, selain endpoint REST yang dapat digunakan dari bahasa pemrograman apa pun." },
-  { question: "Apa yang terjadi jika batas activation tercapai?", answer: "Permintaan activation baru akan ditolak dengan error yang jelas. Customer dapat menonaktifkan installation lama dari sistem Anda atau dashboard sebelum melakukan activation di perangkat baru." },
-  { question: "Bisakah saya upgrade atau downgrade paket?", answer: "Bisa. Upgrade dapat diproses segera setelah pembayaran berhasil, sedangkan downgrade dijadwalkan pada akhir periode berjalan agar entitlement yang sudah digunakan tetap konsisten." },
-  { question: "Apakah data setiap organization terisolasi?", answer: "Ya. Setiap organization memiliki tenant context dan akses diverifikasi server-side berdasarkan membership serta role, sehingga resource organization lain tidak dapat diakses." },
+  { question: "Does the 7-day trial require a payment card?", answer: "No. You can try IndoLicense for 7 days without entering payment details. When the trial ends, the subscription expires and protected API access pauses until you choose a paid plan." },
+  { question: "How are IndoLicense license keys secured?", answer: "License keys are generated with a secure random generator. IndoLicense stores only a hash and key prefix, so the plaintext key cannot be recovered from the dashboard or database." },
+  { question: "Can I use IndoLicense for desktop apps and SaaS?", answer: "Yes. The public API supports license validation, installation activation, and deactivation for desktop apps, web apps, plugins, APIs, and distributed software." },
+  { question: "Are SDKs available for integration?", answer: "Yes. IndoLicense provides reference SDKs for JavaScript and PHP, plus a REST API that can be used with any programming language." },
+  { question: "What happens when an activation limit is reached?", answer: "A new activation request is rejected with a clear error. Your customer can deactivate an old installation from your system or dashboard before activating a new device." },
+  { question: "Can I upgrade or downgrade my plan?", answer: "Yes. Upgrades can take effect after successful payment, while downgrades are scheduled for the end of the current period so existing entitlements remain consistent." },
+  { question: "Is each organization’s data isolated?", answer: "Yes. Every organization has its own tenant context, and access is verified server-side through membership and role checks so other organizations’ resources remain inaccessible." },
 ];
 
 export default function HomePage() {
