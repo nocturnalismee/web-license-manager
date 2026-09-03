@@ -63,6 +63,10 @@ Status: `TODO` | `IN_PROGRESS` | `BLOCKED` | `DONE`
 | T-051 | Integration documentation and examples — **DONE** | T-050 | Copy/paste examples for cURL, PHP, and JavaScript tersedia |
 | T-052 | Playwright critical journey — **DONE** | T-026,T-045 | Signup/dashboard/organization/billing/license sandbox journey pass |
 | T-053 | Production readiness review — **DONE (CONDITIONAL)** | T-031,T-034,T-052 | Checklist documented; provider signature, DB integration, and infrastructure gates remain explicit |
+| T-054 | IndoLicense landing page UI/UX — **DONE** | T-002 | Responsive developer-first landing page, CTA, pricing teaser, and visual smoke test pass |
+| T-055 | Auth pages production UI/UX | T-054 | Polished sign-in, sign-up, reset password, validation, loading, and error states |
+| T-056 | Customer dashboard UI/UX | T-055 | Subscription, products, licenses, activations, usage, billing, and settings flows |
+| T-057 | Internal administrator dashboard UI/UX | T-056 | Tenant/member oversight, audit, system health, and platform operations views |
 
 ## Critical Path
 
