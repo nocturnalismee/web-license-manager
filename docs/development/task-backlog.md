@@ -67,6 +67,7 @@ Status: `TODO` | `IN_PROGRESS` | `BLOCKED` | `DONE`
 | T-055 | Auth pages production UI/UX | T-054 | Polished sign-in, sign-up, reset password, validation, loading, and error states |
 | T-056 | Customer dashboard UI/UX | T-055 | Subscription, products, licenses, activations, usage, billing, and settings flows |
 | T-057 | Internal administrator dashboard UI/UX | T-056 | Tenant/member oversight, audit, system health, and platform operations views |
+| T-058 | Developer documentation hub and API reference — **DONE** | T-025,T-050,T-051 | Real docs for quickstart, license API, SDKs, rate limits, errors, responsive Docs UI |
 
 ## Critical Path
 

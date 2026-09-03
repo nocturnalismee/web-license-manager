@@ -50,6 +50,7 @@ export default function HomePage() {
           <a href="#features">Features</a>
           <a href="#pricing">Pricing</a>
           <a href="#faq">FAQ</a>
+          <Link href="/docs">Docs</Link>
         </div>
         <div className="nav-actions"><ThemeToggle /><Link href="/auth/sign-in">Sign in</Link><Link className="button button-small" href="/auth/sign-up">Get started</Link></div>
       </nav>
