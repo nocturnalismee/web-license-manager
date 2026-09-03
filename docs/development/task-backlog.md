@@ -59,7 +59,7 @@ Status: `TODO` | `IN_PROGRESS` | `BLOCKED` | `DONE`
 
 | ID | Task | Dependency | Acceptance |
 |---|---|---|---|
-| T-050 | PHP reference SDK | T-025 | Timeout/retry/error/cache behavior tested |
+| T-050 | PHP reference SDK — **DONE** | T-025 | Timeout/retry/error/cache behavior tested |
 | T-051 | Integration documentation and examples | T-050 | Copy/paste examples work |
 | T-052 | Playwright critical journey | T-026,T-045 | Signup-to-license and billing sandbox pass |
 | T-053 | Production readiness review | T-031,T-034,T-052 | Security/NFR/rollback checklist signed off |
