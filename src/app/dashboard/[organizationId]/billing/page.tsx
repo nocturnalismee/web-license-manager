@@ -6,7 +6,7 @@ import BillingPanel from "./billing-panel";
 
 export default async function BillingPage({ params }: { params: Promise<{ organizationId: string }> }) {
   const session = await getCurrentUser();
-  if (!session?.user) redirect("/api/auth/sign-in");
+  if (!session?.user) redirect("/auth/sign-in");
   const { organizationId } = await params;
   const membership = await getMembership(session.user.id, organizationId);
   if (!membership) notFound();

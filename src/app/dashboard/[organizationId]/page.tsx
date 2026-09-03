@@ -5,7 +5,7 @@ import { getMembership } from "@/modules/identity/organization-service";
 
 export default async function OrganizationDashboard({ params }: { params: Promise<{ organizationId: string }> }) {
   const session = await getCurrentUser();
-  if (!session?.user) redirect("/api/auth/sign-in");
+  if (!session?.user) redirect("/auth/sign-in");
   const { organizationId } = await params;
   const membership = await getMembership(session.user.id, organizationId);
   if (!membership) notFound();

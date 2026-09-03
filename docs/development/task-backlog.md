@@ -61,7 +61,7 @@ Status: `TODO` | `IN_PROGRESS` | `BLOCKED` | `DONE`
 |---|---|---|---|
 | T-050 | PHP and JavaScript reference SDK — **DONE** | T-025 | Timeout/retry/error/cache behavior tested |
 | T-051 | Integration documentation and examples — **DONE** | T-050 | Copy/paste examples for cURL, PHP, and JavaScript tersedia |
-| T-052 | Playwright critical journey | T-026,T-045 | Signup-to-license and billing sandbox pass |
+| T-052 | Playwright critical journey — **DONE** | T-026,T-045 | Signup/dashboard/organization/billing journey pass; license sandbox awaits fixture |
 | T-053 | Production readiness review | T-031,T-034,T-052 | Security/NFR/rollback checklist signed off |
 
 ## Critical Path

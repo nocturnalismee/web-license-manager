@@ -9,6 +9,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
@@ -16,7 +17,7 @@ const timestamps = {
 };
 
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").defaultRandom().primaryKey(),
   name: varchar("name", { length: 160 }).notNull(),
   email: text("email").notNull(),
   emailVerified: boolean("email_verified").default(false).notNull(),
@@ -25,7 +26,7 @@ export const users = pgTable("users", {
 }, (table) => [unique("users_email_unique").on(table.email)]);
 
 export const sessions = pgTable("sessions", {
-  id: text("id").primaryKey(),
+  id: text("id").default(sql`gen_random_uuid()::text`).primaryKey(),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
   token: text("token").notNull(),
   ipAddress: text("ip_address"),
@@ -38,9 +39,10 @@ export const sessions = pgTable("sessions", {
 ]);
 
 export const accounts = pgTable("accounts", {
-  id: text("id").primaryKey(),
+  id: text("id").default(sql`gen_random_uuid()::text`).primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
+  issuer: text("issuer").default("local:credential").notNull(),
   userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
@@ -50,10 +52,13 @@ export const accounts = pgTable("accounts", {
   scope: text("scope"),
   password: text("password"),
   ...timestamps,
-}, (table) => [index("accounts_user_idx").on(table.userId)]);
+}, (table) => [
+  index("accounts_user_idx").on(table.userId),
+  unique("accounts_issuer_account_unique").on(table.issuer, table.accountId),
+]);
 
 export const verifications = pgTable("verifications", {
-  id: text("id").primaryKey(),
+  id: text("id").default(sql`gen_random_uuid()::text`).primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),

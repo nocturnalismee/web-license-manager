@@ -31,3 +31,8 @@ button.secondary { background: #eef0f4; color: #354052; }
 .meter span.warning-fill { background: #d99220; }
 .meter span.danger { background: #c63d4d; }
 .danger-text { color: #c63d4d; }
+.auth-main { max-width: 520px; }
+.auth-form { display: grid; gap: 16px; margin-top: 24px; }
+.auth-form p { margin: 0; font-size: 14px; }
+.auth-switch { text-align: center; }
+.error-message { color: #c63d4d; font-weight: 700; }

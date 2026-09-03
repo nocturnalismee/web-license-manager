@@ -14,6 +14,7 @@ agent task, dan acceptance criteria.
 | [agent-roles.md](development/agent-roles.md) | Peran AI agent, scope, input, output, dan guardrails |
 | [ai-development-workflow.md](development/ai-development-workflow.md) | Prosedur menjalankan task secara konsisten |
 | [integration-guide.md](integration-guide.md) | Panduan API, PHP SDK, JavaScript/TypeScript SDK, dan error handling |
+| [critical-journey.md](development/critical-journey.md) | Prosedur verifikasi browser journey dengan Playwright |
 
 ## Source of Truth
 

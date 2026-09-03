@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HomePage() {
   return (
     <main>
@@ -10,6 +12,7 @@ export default function HomePage() {
       <section className="card">
         <div className="status">Development foundation active</div>
         <p>Next.js · Drizzle ORM · Supabase PostgreSQL</p>
+        <Link href="/auth/sign-up">Create an account →</Link> <span> · </span><Link href="/auth/sign-in">Sign in</Link>
       </section>
     </main>
   );

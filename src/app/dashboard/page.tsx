@@ -5,7 +5,7 @@ import { listOrganizations } from "@/modules/identity/organization-service";
 
 export default async function DashboardPage() {
   const session = await getCurrentUser();
-  if (!session?.user) redirect("/api/auth/sign-in");
+  if (!session?.user) redirect("/auth/sign-in");
   const organizations = await listOrganizations(session.user.id);
 
   return (
