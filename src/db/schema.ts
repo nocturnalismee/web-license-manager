@@ -166,6 +166,7 @@ export const subscriptions = pgTable("subscriptions", {
   status: varchar("status", { length: 20 }).notNull(),
   provider: varchar("provider", { length: 40 }),
   providerSubscriptionId: varchar("provider_subscription_id", { length: 180 }),
+  scheduledPlatformPlanId: uuid("scheduled_platform_plan_id").references(() => platformPlans.id),
   trialStartedAt: timestamp("trial_started_at", { withTimezone: true }),
   trialEndsAt: timestamp("trial_ends_at", { withTimezone: true }),
   graceEndsAt: timestamp("grace_ends_at", { withTimezone: true }),

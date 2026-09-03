@@ -52,7 +52,7 @@ Status: `TODO` | `IN_PROGRESS` | `BLOCKED` | `DONE`
 | T-041 | Mayar checkout/order/payment adapter — **DONE** | T-040 | Checkout reference persisted |
 | T-042 | Webhook verification and idempotent event store — **DONE** | T-041 | Duplicate/tampered event handling implemented; provider signature header must be confirmed in sandbox |
 | T-043 | Subscription state machine, trial, grace period — **DONE** | T-042,T-005 | Seven-day trial/grace transition tests pass |
-| T-044 | Upgrade/downgrade/cancellation policy | T-043 | Immediate/scheduled behavior tested |
+| T-044 | Upgrade/downgrade/cancellation policy — **DONE** | T-043 | Upgrade-after-payment, downgrade-at-period-end, reversible cancellation tested |
 | T-045 | Billing dashboard and usage paywall | T-040,T-043 | UI explains effect before confirmation |
 
 ## Phase 5 — DX and Release

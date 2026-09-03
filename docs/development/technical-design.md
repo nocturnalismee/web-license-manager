@@ -133,6 +133,9 @@ Billing MVP policy:
 - Trial 7 hari, tanpa kartu pembayaran; setelah berakhir status menjadi `expired`.
 - Payment failure menjadi `past_due` selama 7 hari; setelah itu `suspended`.
 - Pembayaran sukses mengaktifkan subscription dan materialize entitlement plan dalam satu transaksi.
+- Upgrade dibuat sebagai order baru dan berlaku setelah payment webhook sukses; MVP tidak memakai proration.
+- Downgrade disimpan sebagai `scheduled_platform_plan_id` dan berlaku pada akhir periode berjalan.
+- Cancellation mengatur `cancel_at_period_end`; akses tetap berjalan hingga akhir periode dan dapat di-resume.
 - Mayar hanya provider; order, payment, subscription, dan entitlement IndoLicense tetap source of truth.
 
 ```text
