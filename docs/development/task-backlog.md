@@ -16,8 +16,8 @@ Status: `TODO` | `IN_PROGRESS` | `BLOCKED` | `DONE`
 
 | ID | Task | Dependency | Acceptance |
 |---|---|---|---|
-| T-010 | Schema users, organizations, memberships | T-003 | Migration + constraints + seed |
-| T-011 | Signup/signin/session/logout/password reset | T-002,T-010 | Critical auth tests pass |
+| T-010 | Better Auth core schema + organizations/memberships | T-003 | Migration + constraints + seed |
+| T-011 | Better Auth signup/signin/session/logout/password reset | T-010 | Critical auth tests pass |
 | T-012 | Organization switcher and membership context | T-011 | User hanya melihat tenant aktif |
 | T-013 | RBAC policy Owner/Admin/Developer/Viewer | T-010 | Authorization matrix tested server-side |
 | T-014 | Cross-tenant security test suite | T-013 | All negative access cases pass |

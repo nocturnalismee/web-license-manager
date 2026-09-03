@@ -4,7 +4,8 @@
 
 | Table | Tenant | Tujuan |
 |---|---|---|
-| `users` | platform | Identity reference |
+| `auth_user` | platform | Better Auth user identity |
+| `auth_session` / `auth_account` / `auth_verification` | platform | Better Auth session/provider/verification data |
 | `organizations` | root | Tenant vendor |
 | `organization_members` | organization | Membership + role |
 | `platform_plans` | platform | Paket SaaS |
@@ -19,6 +20,10 @@
 | `api_keys` | organization/product | Vendor management credentials |
 | `webhook_events` | platform/provider | Idempotent provider events |
 | `audit_logs` | organization/platform | Append-only activity trail |
+
+Better Auth core tables harus dibuat/maintain melalui schema Drizzle adapter Better Auth.
+Application tables menggunakan Better Auth user ID dan tidak boleh menduplikasi password,
+session, account, atau verification data.
 
 ## 2. Required Constraints
 

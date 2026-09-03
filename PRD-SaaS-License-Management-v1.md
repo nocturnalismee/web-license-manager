@@ -314,7 +314,8 @@ Immutable or append-oriented record of important account, license, billing, acti
 - No sensitive credentials in client-side code
 - Server-side authorization checks
 
-Supabase Auth may be used during MVP, but application business logic must not become tightly coupled to Supabase-specific APIs.
+Better Auth digunakan sebagai authentication layer MVP. Application business logic tidak boleh
+terikat langsung pada Better Auth API; gunakan Auth Adapter/identity service.
 
 ---
 
@@ -1030,7 +1031,7 @@ A future option is a signed license response/token so the client can cryptograph
 
 ### Authentication
 
-- Supabase Auth during MVP
+- Better Auth during MVP
 
 ### Hosting
 
@@ -1090,9 +1091,7 @@ Sebelum development database dimulai, minta user menyediakan:
 - Supabase project URL.
 - Direct PostgreSQL connection string untuk Drizzle migration/admin operation.
 - Pooled connection string jika runtime membutuhkan connection pooling.
-- Supabase publishable/anon key jika Supabase Auth atau client SDK digunakan.
-- Supabase service role key hanya jika benar-benar diperlukan server-side; jangan meminta atau
-  menaruhnya di client/browser.
+- Better Auth URL dan server-only secret.
 - Environment target: development, staging, atau production.
 - Konfirmasi apakah database boleh dimigration dan apakah data existing harus dipertahankan.
 
@@ -1135,8 +1134,8 @@ membuat migration dari perubahan schema; `db:migrate` menerapkan migration ke ta
 - Jangan menggunakan reset/drop database pada project yang berisi data penting.
 - Integration test concurrency activation tetap wajib dijalankan pada PostgreSQL Supabase;
   SQLite tidak digunakan sebagai compatibility target MVP.
-- Supabase Auth boleh digunakan untuk authentication MVP, tetapi schema dan domain logic tetap
-  dikendalikan oleh Drizzle/application layer.
+- Better Auth schema dan domain logic tetap dikendalikan melalui Drizzle/application migration;
+  Better Auth tidak boleh menjadi sumber authorization tenant tanpa application policy.
 
 ---
 

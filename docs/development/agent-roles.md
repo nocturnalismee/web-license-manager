@@ -8,6 +8,7 @@ decision record dan persetujuan coordinator.
 | Agent | Scope | Output |
 |---|---|---|
 | `product-analyst` | Requirement, ambiguity, acceptance criteria | Decision request, refined task |
+| `auth-engineer` | Better Auth schema, session, verification, auth adapter | Auth routes, migration, security tests |
 | `solution-architect` | Module boundary, data flow, ADR | Technical design/ADR |
 | `database-engineer` | Drizzle schema, migration, indexes | Schema + migration + tests |
 | `backend-engineer` | Domain/application service, API | Service, route, contract tests |

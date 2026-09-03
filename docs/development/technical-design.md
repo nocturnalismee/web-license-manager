@@ -104,7 +104,7 @@ Mayar webhook
 
 Secret API key tidak boleh berada di browser atau distributed plugin/package.
 
-## 6. Supabase and Drizzle
+## 6. Better Auth, Supabase, and Drizzle
 
 - Supabase PostgreSQL menjadi target database sejak development awal.
 - Drizzle schema adalah definisi tabel aplikasi.
@@ -112,15 +112,23 @@ Secret API key tidak boleh berada di browser atau distributed plugin/package.
 - Drizzle Studio hanya untuk inspect/debug terbatas.
 - Schema tidak diedit manual melalui Supabase Dashboard.
 - Semua environment memakai migration repository yang sama.
+- Better Auth menangani user, session, account, dan verification.
+- Authorization tenant/RBAC tetap menjadi tanggung jawab application layer.
+- Supabase hanya menjadi PostgreSQL managed; tidak ada ketergantungan terhadap Supabase Auth,
+  Data API, atau client SDK.
+
+Better Auth dipilih untuk menjaga portability jika IndoLicense nantinya dipindahkan ke VPS
+dengan PostgreSQL milik sendiri. Auth tables tetap berada di database aplikasi dan dikelola
+melalui Drizzle adapter. Provider, session, dan verification flow harus diakses melalui Auth
+Adapter agar domain service tidak bergantung pada library tertentu.
 
 Environment minimum:
 
 ```text
 DATABASE_URL=Supabase direct connection string
 DATABASE_POOL_URL=Supabase pooled connection string (if runtime needs it)
-NEXT_PUBLIC_SUPABASE_URL=project URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY=publishable/anon key
-SUPABASE_SERVICE_ROLE_KEY=server-only, only when required
+BETTER_AUTH_URL=http://localhost:3000
+BETTER_AUTH_SECRET=server-only secret
 ```
 
 ## 7. Non-Functional Baseline
