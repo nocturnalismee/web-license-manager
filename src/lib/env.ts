@@ -1,13 +1,20 @@
 import { z } from "zod";
 
+const optionalUrl = z.preprocess(
+  (value) => (value === "" ? undefined : value),
+  z.string().url().optional(),
+);
+
 const serverEnvSchema = z.object({
-  DATABASE_URL: z.string().url().optional(),
-  DATABASE_POOL_URL: z.string().url().optional(),
+  DATABASE_URL: optionalUrl,
+  DATABASE_POOL_URL: optionalUrl,
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
+  BETTER_AUTH_URL: z.string().url().default("http://localhost:3000"),
+  BETTER_AUTH_SECRET: z.string().min(32).optional(),
 });
 
 const publicEnvSchema = z.object({
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
+  NEXT_PUBLIC_SUPABASE_URL: optionalUrl,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).optional(),
 });
 
