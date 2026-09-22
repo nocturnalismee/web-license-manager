@@ -3,19 +3,28 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/db";
 import { entitlements, orders, payments, platformPlans, subscriptions, webhookEvents } from "@/db/schema";
 import { parsePlatformLimits } from "@/modules/entitlements/entitlement-service";
-import { verifyMayarWebhook } from "@/modules/billing/mayar-adapter";
+import { verifyMayarWebhook, readBoundedText } from "@/modules/billing/mayar-adapter";
 
 type MayarPayload = { event?: string; data?: { id?: string; transactionId?: string; transaction_id?: string; status?: string; amount?: number; updatedAt?: string } };
 
 export async function POST(request: Request) {
-  const rawBody = await request.text();
+  const requestId = crypto.randomUUID();
+  let rawBody: string;
+  try {
+    rawBody = await readBoundedText(request, 65536);
+  } catch {
+    return NextResponse.json({ data: null, error: { code: "PAYLOAD_TOO_LARGE" }, request_id: requestId }, { status: 413 });
+  }
+  if (!process.env.MAYAR_WEBHOOK_SECRET) {
+    return NextResponse.json({ data: null, error: { code: "WEBHOOK_NOT_CONFIGURED" }, request_id: requestId }, { status: 503 });
+  }
   const signature = request.headers.get("x-mayar-signature") ?? request.headers.get("x-webhook-signature");
-  if (!verifyMayarWebhook(rawBody, signature, process.env.MAYAR_WEBHOOK_SECRET)) return NextResponse.json({ error: "INVALID_WEBHOOK_SIGNATURE" }, { status: 401 });
+  if (!verifyMayarWebhook(rawBody, signature, process.env.MAYAR_WEBHOOK_SECRET)) return NextResponse.json({ data: null, error: { code: "INVALID_WEBHOOK_SIGNATURE" }, request_id: requestId }, { status: 401 });
   let payload: MayarPayload;
-  try { payload = JSON.parse(rawBody) as MayarPayload; } catch { return NextResponse.json({ error: "INVALID_JSON" }, { status: 400 }); }
+  try { payload = JSON.parse(rawBody) as MayarPayload; } catch { return NextResponse.json({ data: null, error: { code: "INVALID_JSON" }, request_id: requestId }, { status: 400 }); }
   const eventType = payload.event;
   const providerPaymentId = payload.data?.transactionId ?? payload.data?.transaction_id ?? payload.data?.id;
-  if (!eventType || !providerPaymentId) return NextResponse.json({ error: "INVALID_WEBHOOK_PAYLOAD" }, { status: 400 });
+  if (!eventType || !providerPaymentId) return NextResponse.json({ data: null, error: { code: "INVALID_WEBHOOK_PAYLOAD" }, request_id: requestId }, { status: 400 });
   // Mayar's payload may not include a separate event UUID. Include event type
   // and provider update timestamp so reminder and received events are distinct,
   // while an exact retry remains idempotent.
@@ -47,5 +56,5 @@ export async function POST(request: Request) {
     }
     await tx.update(webhookEvents).set({ status: "processed", processedAt: new Date() }).where(eq(webhookEvents.id, inserted[0].id));
   });
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ data: { received: true }, error: null, request_id: requestId });
 }
