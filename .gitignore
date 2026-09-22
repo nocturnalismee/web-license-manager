@@ -9,3 +9,5 @@ coverage/
 !.env.example
 drizzle/meta/
 *.log
+.worktrees/
+.superpowers/
