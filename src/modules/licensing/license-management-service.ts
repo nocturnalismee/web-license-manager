@@ -23,11 +23,15 @@ export async function createManagedLicense(input: { organizationId: string; prod
   return result;
 }
 
+export function escapeLikeWildcards(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/%/g, "\\%").replace(/_/g, "\\_");
+}
+
 export async function listManagedLicenses(input: { organizationId: string; limit: number; offset: number; status?: string; productId?: string; search?: string }) {
   const filters = [eq(licenses.organizationId, input.organizationId)];
   if (input.status) filters.push(eq(licenses.status, input.status));
   if (input.productId) filters.push(eq(licenses.productId, input.productId));
-  if (input.search) filters.push(ilike(customers.email, `%${input.search}%`));
+  if (input.search) filters.push(ilike(customers.email, `%${escapeLikeWildcards(input.search)}%`));
   const rows = await getDb().select({
     id: licenses.id, keyPrefix: licenses.keyPrefix, status: licenses.status, startsAt: licenses.startsAt, expiresAt: licenses.expiresAt, activationLimit: licenses.activationLimit,
     product: products.name, productId: licenses.productId, plan: productLicensePlans.name, customerName: customers.name, customerEmail: customers.email,
