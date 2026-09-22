@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { consumeRateLimit } from "@/modules/developer-api/rate-limit-service";
+import { logger } from "@/lib/structured-logger";
 
 export const publicLicenseRequestSchema = z.object({
   product_public_id: z.string().regex(/^prod_[a-z0-9]{24}$/),
@@ -23,11 +24,20 @@ export function apiError(code: string, requestId: string, retryAfter?: number) {
 }
 
 export async function parsePublicLicenseRequest(request: Request, requestId: string, action: "activate" | "validate" | "deactivate") {
+  const contentLength = Number(request.headers.get("content-length") ?? "0");
+  if (contentLength > 16384) return { response: apiError("INVALID_REQUEST", requestId) } as const;
   const parsed = publicLicenseRequestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) { return { response: apiError("INVALID_REQUEST", requestId) } as const; }
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   const limit = action === "validate" ? 60 : 10;
-  const rate = await consumeRateLimit(`${parsed.data.product_public_id}:${action}:${ip}`, limit, 60);
-  if (!rate.allowed) return { response: apiError("RATE_LIMITED", requestId, rate.retryAfterSeconds) } as const;
+  const rate = await consumeRateLimit(
+    `${parsed.data.product_public_id}:${action}:${parsed.data.installation_id}:${ip}`,
+    limit,
+    60,
+  );
+  if (!rate.allowed) {
+    logger.warn("public_api_rate_limited", { product: parsed.data.product_public_id, action, request_id: requestId });
+    return { response: apiError("RATE_LIMITED", requestId, rate.retryAfterSeconds) } as const;
+  }
   return { value: { productPublicId: parsed.data.product_public_id, licenseKey: parsed.data.license_key, installationId: parsed.data.installation_id, domain: parsed.data.domain } } as const;
 }
