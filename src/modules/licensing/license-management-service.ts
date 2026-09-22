@@ -3,10 +3,17 @@ import { getDb } from "@/db";
 import { customers, licenseActivations, licenses, productLicensePlans, products } from "@/db/schema";
 import { generateLicenseKey } from "@/lib/license-key";
 import { recordAuditEvent } from "@/modules/audit/audit-service";
+import { consumeEntitlement } from "@/modules/entitlements/entitlement-service";
 
 function addDays(date: Date, days: number) { return new Date(date.getTime() + days * 24 * 60 * 60 * 1000); }
 
 export async function createManagedLicense(input: { organizationId: string; productId: string; productLicensePlanId: string; customer: { name?: string; email?: string } }) {
+  try {
+    await consumeEntitlement(input.organizationId, "licenses", 1);
+  } catch (error) {
+    if (error instanceof Error && error.message === "ENTITLEMENT_LIMIT_REACHED") throw error;
+    // Missing entitlement row (legacy org without subscription) means unlimited during migration.
+  }
   const db = getDb();
   const [plan] = await db.select().from(productLicensePlans).where(and(eq(productLicensePlans.id, input.productLicensePlanId), eq(productLicensePlans.organizationId, input.organizationId), eq(productLicensePlans.productId, input.productId))).limit(1);
   if (!plan) throw new Error("PRODUCT_LICENSE_PLAN_NOT_FOUND");
