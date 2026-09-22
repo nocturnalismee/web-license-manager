@@ -17,9 +17,17 @@ export function getEffectiveLicenseStatus(input: {
   return "active";
 }
 
+import { toASCII } from "node:punycode";
+
 export function normalizeDomain(domain: string): string {
-  const value = domain.trim().toLowerCase().replace(/\.$/, "");
-  if (!value || value.length > 253 || value.includes("/") || value.includes("@") || value.includes(" ")) {
+  const raw = domain.trim().toLowerCase().replace(/\.$/, "");
+  if (!raw || raw.length > 253 || raw.includes("/") || raw.includes("@") || raw.includes(" ")) {
+    throw new Error("INVALID_DOMAIN");
+  }
+  let value = raw;
+  try {
+    value = toASCII(raw);
+  } catch {
     throw new Error("INVALID_DOMAIN");
   }
   const labels = value.split(".");

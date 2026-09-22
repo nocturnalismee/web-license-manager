@@ -24,5 +24,5 @@ export async function POST(request: Request, context: Context) {
     const parsed = schema.safeParse(await request.json().catch(() => null)); if (!parsed.success) return NextResponse.json({ data: null, error: { code: "INVALID_REQUEST" }, request_id: requestId }, { status: 400 });
     const data = await createManagedLicense({ organizationId, productId: parsed.data.product_id, productLicensePlanId: parsed.data.product_license_plan_id, customer: parsed.data.customer });
     return NextResponse.json({ data, error: null, request_id: requestId }, { status: 201 });
-  } catch (error) { const code = error instanceof Error ? error.message : "INTERNAL_ERROR"; const status = code === "UNAUTHENTICATED" ? 401 : code === "FORBIDDEN" ? 403 : code.endsWith("NOT_FOUND") ? 404 : 400; return NextResponse.json({ data: null, error: { code }, request_id: requestId }, { status }); }
+  } catch (error) { const code = error instanceof Error ? error.message : "INTERNAL_ERROR"; const status = code === "UNAUTHENTICATED" ? 401 : code === "FORBIDDEN" || code === "ENTITLEMENT_LIMIT_REACHED" ? 403 : code.endsWith("NOT_FOUND") ? 404 : 400; return NextResponse.json({ data: null, error: code === "ENTITLEMENT_LIMIT_REACHED" ? { code, details: { upgrade: true } } : { code }, request_id: requestId }, { status }); }
 }

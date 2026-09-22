@@ -29,4 +29,8 @@ describe("organization RBAC policy", () => {
     expect(can("admin", "resource:write")).toBe(true);
     expect(can("admin", "organization:delete")).toBe(false);
   });
+
+  it("grants owners activation management", () => {
+    expect(can("owner", "activation:manage")).toBe(true);
+  });
 });

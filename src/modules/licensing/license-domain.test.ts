@@ -18,4 +18,9 @@ describe("license domain rules", () => {
     expect(() => normalizeDomain("localhost")).toThrow("INVALID_DOMAIN");
     expect(() => normalizeDomain("bad_domain.com")).toThrow("INVALID_DOMAIN");
   });
+
+  it("converts IDN to punycode and keeps ASCII stable", () => {
+    expect(normalizeDomain("münchen.de")).toBe("xn--mnchen-3ya.de");
+    expect(normalizeDomain("Example.COM.")).toBe("example.com");
+  });
 });

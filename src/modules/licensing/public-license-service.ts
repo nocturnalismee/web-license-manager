@@ -2,6 +2,7 @@ import { and, count, eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { licenseActivations, licenses, productLicensePlans, products } from "@/db/schema";
 import { hashLicenseKey } from "@/lib/license-key";
+import { recordAuditEvent } from "@/modules/audit/audit-service";
 import { getEffectiveLicenseStatus, normalizeDomain } from "./license-domain";
 
 type LicenseRequest = { productPublicId: string; licenseKey: string; installationId: string; domain: string };
@@ -67,6 +68,15 @@ export async function activateLicense(request: LicenseRequest) {
     const [activation] = existing
       ? await tx.update(licenseActivations).set({ status: "active", domain: request.domain.trim(), normalizedDomain: row.domain, deactivatedAt: null, lastSeenAt: new Date(), updatedAt: new Date() }).where(eq(licenseActivations.id, existing.id)).returning()
       : await tx.insert(licenseActivations).values({ organizationId: row.license.organizationId, licenseId: row.license.id, installationId: row.installationId, domain: request.domain.trim(), normalizedDomain: row.domain }).returning();
+    await recordAuditEvent({
+      organizationId: row.license.organizationId,
+      actorType: "public_api",
+      action: "license.activated",
+      resourceType: "license",
+      resourceId: row.license.id,
+      metadata: { installation_id: row.installationId, idempotent: existing?.status === "active" },
+      success: true,
+    });
     return { ...publicLicenseResponse(row), activation_id: activation.id, idempotent: false };
   });
 }
@@ -87,6 +97,33 @@ export async function deactivateLicense(request: LicenseRequest) {
     )).limit(1);
     if (!activation || activation.status !== "active") throw new Error("ACTIVATION_NOT_FOUND");
     const [updated] = await tx.update(licenseActivations).set({ status: "deactivated", deactivatedAt: new Date(), updatedAt: new Date() }).where(eq(licenseActivations.id, activation.id)).returning();
+    await recordAuditEvent({
+      organizationId: row.license.organizationId,
+      actorType: "public_api",
+      action: "license.deactivated",
+      resourceType: "license",
+      resourceId: row.license.id,
+      metadata: { installation_id: row.installationId },
+      success: true,
+    });
     return { ...publicLicenseResponse(row), activation_id: updated.id, deactivated: true };
   });
+}
+
+export async function getLicenseStatus(input: { productPublicId: string; licenseKey: string }) {
+  const keyHash = hashLicenseKey(input.licenseKey);
+  const rows = await getDb()
+    .select({ license: licenses, product: products, plan: productLicensePlans })
+    .from(licenses)
+    .innerJoin(products, eq(products.id, licenses.productId))
+    .innerJoin(productLicensePlans, eq(productLicensePlans.id, licenses.productLicensePlanId))
+    .where(and(eq(products.publicId, input.productPublicId), eq(licenses.keyHash, keyHash)))
+    .limit(1);
+  const row = rows[0];
+  if (!row) throw new Error("LICENSE_NOT_FOUND");
+  const [{ activeCount }] = await getDb()
+    .select({ activeCount: count() })
+    .from(licenseActivations)
+    .where(and(eq(licenseActivations.licenseId, row.license.id), eq(licenseActivations.status, "active")));
+  return { status: getEffectiveLicenseStatus(row.license), expires_at: row.license.expiresAt.toISOString(), activation_count: activeCount };
 }

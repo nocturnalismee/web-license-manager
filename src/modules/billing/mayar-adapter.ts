@@ -34,11 +34,26 @@ export class MayarClient implements BillingProvider {
 }
 
 export function verifyMayarWebhook(rawBody: string, signature: string | null, secret: string | undefined) {
-  if (!secret) return process.env.NODE_ENV !== "production";
+  if (!secret) return false;
   if (!signature) return false;
   const digest = crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
   if (digest.length !== signature.length) return false;
   return crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
+}
+
+export async function readBoundedText(request: Request, maxBytes = 65536): Promise<string> {
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  const reader = request.body?.getReader();
+  if (!reader) return "";
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > maxBytes) throw new Error("PAYLOAD_TOO_LARGE");
+    chunks.push(value);
+  }
+  return Buffer.concat(chunks).toString("utf8");
 }
 
 export function getMayarClient() {

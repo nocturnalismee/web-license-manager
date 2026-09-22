@@ -3,10 +3,15 @@ import { getDb } from "@/db";
 import { customers, licenseActivations, licenses, productLicensePlans, products } from "@/db/schema";
 import { generateLicenseKey } from "@/lib/license-key";
 import { recordAuditEvent } from "@/modules/audit/audit-service";
+import { consumeEntitlement, getOrganizationEntitlements } from "@/modules/entitlements/entitlement-service";
 
 function addDays(date: Date, days: number) { return new Date(date.getTime() + days * 24 * 60 * 60 * 1000); }
 
 export async function createManagedLicense(input: { organizationId: string; productId: string; productLicensePlanId: string; customer: { name?: string; email?: string } }) {
+  const entitlementRows = await getOrganizationEntitlements(input.organizationId);
+  if (entitlementRows.some((row) => row.feature === "licenses")) {
+    await consumeEntitlement(input.organizationId, "licenses", 1);
+  }
   const db = getDb();
   const [plan] = await db.select().from(productLicensePlans).where(and(eq(productLicensePlans.id, input.productLicensePlanId), eq(productLicensePlans.organizationId, input.organizationId), eq(productLicensePlans.productId, input.productId))).limit(1);
   if (!plan) throw new Error("PRODUCT_LICENSE_PLAN_NOT_FOUND");
@@ -23,11 +28,15 @@ export async function createManagedLicense(input: { organizationId: string; prod
   return result;
 }
 
+export function escapeLikeWildcards(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/%/g, "\\%").replace(/_/g, "\\_");
+}
+
 export async function listManagedLicenses(input: { organizationId: string; limit: number; offset: number; status?: string; productId?: string; search?: string }) {
   const filters = [eq(licenses.organizationId, input.organizationId)];
   if (input.status) filters.push(eq(licenses.status, input.status));
   if (input.productId) filters.push(eq(licenses.productId, input.productId));
-  if (input.search) filters.push(ilike(customers.email, `%${input.search}%`));
+  if (input.search) filters.push(ilike(customers.email, `%${escapeLikeWildcards(input.search)}%`));
   const rows = await getDb().select({
     id: licenses.id, keyPrefix: licenses.keyPrefix, status: licenses.status, startsAt: licenses.startsAt, expiresAt: licenses.expiresAt, activationLimit: licenses.activationLimit,
     product: products.name, productId: licenses.productId, plan: productLicensePlans.name, customerName: customers.name, customerEmail: customers.email,
